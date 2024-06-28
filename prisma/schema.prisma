@@ -1,0 +1,45 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EditionType {
+  REGULAR
+  BORDERLESS
+  ART
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+model Extensions {
+  id    Int     @id @default(autoincrement())
+  name  String
+  cards Cards[]
+  image Bytes?
+}
+
+model Cards {
+  id       Int        @id @default(autoincrement())
+  sourceId String
+  title    String
+  Edition  Editions[]
+
+  extensionId Int
+  extension   Extensions @relation(fields: [extensionId], references: [id])
+
+  @@index([extensionId], name: "extensionId")
+}
+
+model Editions {
+  id     Int         @id @default(autoincrement())
+  name   String
+  type   EditionType
+  stock  Int
+  image  Bytes?
+  isFoil Boolean
+  Card   Cards       @relation(fields: [cardId], references: [id])
+  cardId Int
+}
