@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { NextUIProvider } from "@nextui-org/react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Header from "./components/header/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head></head>
+      <body className={inter.className}>
+        <NextUIProvider>
+          <NextThemesProvider attribute="class" defaultTheme="dark">
+            <Header></Header>
+            {children}
+          </NextThemesProvider>
+        </NextUIProvider>
+      </body>
     </html>
   );
 }

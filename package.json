@@ -11,9 +11,17 @@
     "prisma:push": "npx prisma db push"
   },
   "dependencies": {
+    "@nextui-org/navbar": "^2.0.33",
+    "@nextui-org/react": "^2.4.2",
+    "@nextui-org/system": "^2.2.2",
+    "@nextui-org/theme": "^2.2.6",
     "@prisma/client": "^5.16.1",
+    "@tabler/core": "^1.0.0-beta20",
+    "@tabler/icons-react": "^3.7.0",
     "dotenv": "^16.4.5",
+    "framer-motion": "^11.2.12",
     "next": "14.2.4",
+    "next-themes": "^0.3.0",
     "prisma": "^5.16.1",
     "react": "^18",
     "react-dom": "^18"
@@ -24,7 +32,8 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
-    "postcss": "^8",
+    "postcss": "^8.4.38",
+    "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
