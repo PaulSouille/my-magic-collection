@@ -21,12 +21,12 @@ import styles from "./header.module.css";
 export default function Header() {
   {
     return (
-      <Navbar isBordered>
+      <Navbar className="bg-background/100" isBordered>
         <NavbarContent justify="start">
           <NavbarBrand className="mr-4"></NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-3">
             <NavbarItem className="text-secondary-500 font-semibold">
-              My magic collection
+              <Link href="/">My magic collection</Link>
             </NavbarItem>
           </NavbarContent>
         </NavbarContent>
@@ -52,22 +52,3 @@ export default function Header() {
     );
   }
 }
-
-//   return (
-//     <Navbar>
-//       <NavbarBrand></NavbarBrand>
-//       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-//         <NavbarItem>
-//           <Link color="foreground" href="#">
-//             My magic collection
-//           </Link>
-//         </NavbarItem>
-//       </NavbarContent>
-//       <NavbarContent justify="end">
-//         <NavbarItem>
-//           <ThemeSwitch></ThemeSwitch>
-//         </NavbarItem>
-//       </NavbarContent>
-//     </Navbar>
-//   );
-// }

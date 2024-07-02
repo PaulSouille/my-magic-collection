@@ -3,10 +3,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum EditionType {
-  REGULAR
+enum BorderColor {
+  BLACK
   BORDERLESS
-  ART
+  WHITE
+  SILVER
+  GOLD
+}
+
+enum Rarity {
+  UNCOMMON
+  COMMON
+  RARE
+  MYTHIC
+  SPECIAL
+  BONUS
 }
 
 generator client {
@@ -22,24 +33,24 @@ model Extensions {
 }
 
 model Cards {
-  id       Int        @id @default(autoincrement())
-  sourceId String
-  title    String
-  Edition  Editions[]
+  id           Int         @id @default(autoincrement())
+  sourceId     String
+  name         String
+  printedName  String
+  content      String?
+  cardMarketId Int?
+  typeLine     String
+  type         Rarity
+  borderColor  BorderColor
+  stock        Int
+  isFoil       Boolean
+  normalImage  Bytes?
+  smallImage   Bytes?
+  price        String?
 
-  extensionId Int
-  extension   Extensions @relation(fields: [extensionId], references: [id])
+  extensionId  Int
+  Extensions   Extensions? @relation(fields: [extensionsId], references: [id])
+  extensionsId Int?
 
   @@index([extensionId], name: "extensionId")
-}
-
-model Editions {
-  id     Int         @id @default(autoincrement())
-  name   String
-  type   EditionType
-  stock  Int
-  image  Bytes?
-  isFoil Boolean
-  Card   Cards       @relation(fields: [cardId], references: [id])
-  cardId Int
 }

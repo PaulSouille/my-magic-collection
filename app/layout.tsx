@@ -20,12 +20,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        <link
+          href="//cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css"
+          rel="stylesheet"
+          type="text/css"
+        />
+      </head>
       <body className={inter.className}>
         <NextUIProvider>
           <NextThemesProvider attribute="class" defaultTheme="dark">
             <Header></Header>
-            {children}
+            <main className="flex min-h-screen flex-col items-center pt-24">
+              {children}
+            </main>
           </NextThemesProvider>
         </NextUIProvider>
       </body>
