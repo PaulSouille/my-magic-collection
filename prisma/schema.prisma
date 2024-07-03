@@ -30,6 +30,7 @@ model Extensions {
   name  String
   cards Cards[]
   image Bytes?
+  code  String  @unique
 }
 
 model Cards {

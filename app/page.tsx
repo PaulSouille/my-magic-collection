@@ -1,36 +1,12 @@
 "use client";
-import { Extensions } from "@prisma/client";
-import { useEffect, useState } from "react";
-import { Skeleton } from "@nextui-org/skeleton";
-import { Card, Link } from "@nextui-org/react";
-import ExtensionSkeleton from "./components/skeleton/extension";
 import { Image } from "@nextui-org/image";
+import { Link } from "@nextui-org/react";
+import ExtensionSkeleton from "./components/skeleton/extension";
+import useExtensions from "./hooks/useExtensions";
 
 export default function Home() {
-  const [extensions, setExtensions] = useState<Extensions[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { extensions, loading } = useExtensions();
 
-  useEffect(() => {
-    fetch("/api/extensions")
-      .then((response) => response.json())
-      .then((data) => {
-        const extensionsWithBase64 = data.map((extension: Extensions) => ({
-          ...extension,
-          image: Buffer.from(extension.image!).toString("base64"),
-        }));
-        setExtensions(extensionsWithBase64);
-        setLoading(false);
-        const repeatedArray = Array.from(
-          { length: 10 },
-          () => extensionsWithBase64[0]
-        );
-        setExtensions(repeatedArray);
-      })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
-        setLoading(false);
-      });
-  }, []);
   if (loading) return <ExtensionSkeleton></ExtensionSkeleton>;
 
   return (

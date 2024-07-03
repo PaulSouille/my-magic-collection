@@ -25,8 +25,10 @@ export default function Header() {
         <NavbarContent justify="start">
           <NavbarBrand className="mr-4"></NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-3">
-            <NavbarItem className="text-secondary-500 font-semibold">
-              <Link href="/">My magic collection</Link>
+            <NavbarItem>
+              <Link className="text-secondary-500 font-semibold" href="/">
+                My magic collection
+              </Link>
             </NavbarItem>
           </NavbarContent>
         </NavbarContent>

@@ -62,7 +62,3 @@ body {
     content: counter(step);
   }
 }
-
-main{
-  background-color: #FFF;
-}
