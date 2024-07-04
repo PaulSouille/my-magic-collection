@@ -1,33 +1,86 @@
-import { Extensions } from "@prisma/client";
+import { Cards } from "@prisma/client";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
-const useExtensions = (extensionId: number) => {
-  const [extensions, setExtensions] = useState<Extensions[]>([]);
+interface ICardsResponse {
+  cards: Cards[];
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  totalCards: number;
+}
+
+interface IApiResponse<T> {
+  data: T | null;
+  loading: boolean;
+}
+
+const useCards = (
+  extensionId: string,
+  page: number,
+  pageSize: number,
+): IApiResponse<ICardsResponse> => {
+  const [data, setData] = useState<ICardsResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch(`/api/extensions/${extensionId}/cards`)
-      .then((response) => response.json())
+    axios
+      .get(`/api/extensions/${extensionId}/cards`, {
+        params: {
+          page,
+          pageSize,
+        },
+      })
+      .then((response) => response.data)
       .then((data) => {
-        const extensionsWithBase64 = data.map((extension: Extensions) => ({
-          ...extension,
-          image: Buffer.from(extension.image!).toString("base64"),
+        const cardsWithBase64 = data.cards.map((card: Cards) => ({
+          ...card,
+          smallImage: Buffer.from(card.smallImage!).toString("base64"),
+          normalImage: Buffer.from(card.normalImage!).toString("base64"),
         }));
-        setExtensions(extensionsWithBase64);
+        setData({ ...data, cards: cardsWithBase64 });
         setLoading(false);
-        const repeatedArray = Array.from(
-          { length: 10 },
-          () => extensionsWithBase64[0],
-        );
-        setExtensions(repeatedArray);
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching cards:", error);
         setLoading(false);
       });
-  }, []);
+  }, [extensionId, page, pageSize]);
 
-  return { extensions, loading };
+  return { data, loading };
 };
+export default useCards;
 
-export default useExtensions;
+// const useCards = (extensionId: string, page: number, pageSize: number) => {
+//   const [cards, setCards] = useState<Cards[]>([]);
+//   const [loading, setLoading] = useState<boolean>(true);
+
+//   useEffect(() => {
+//     const searchParams = new URLSearchParams({
+//       page: page.toString(),
+//       pageSize: pageSize.toString(),
+//     });
+//     const url = new URL(`/api/extensions/${extensionId}/cards`);
+//     url.search = searchParams.toString();
+//     console.log(url);
+//     fetch(url)
+//       .then((response) => response.json())
+//       .then((data) => {
+//         const cardsWithBase64 = data.map((card: Cards) => ({
+//           ...card,
+//           smallImage: Buffer.from(card.smallImage!).toString("base64"),
+//           normalImage: Buffer.from(card.normalImage!).toString("base64"),
+//         }));
+//         setCards(cardsWithBase64);
+//         setLoading(false);
+
+//         setCards(cardsWithBase64);
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching cards:", error);
+//         setLoading(false);
+//       });
+//   }, []);
+
+//   return { cards, loading };
+// };

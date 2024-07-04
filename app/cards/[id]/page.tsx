@@ -1,16 +1,33 @@
 "use client";
-// pages/cards/[id].tsx
+import useCards from "@/app/hooks/useCards";
+import { Image } from "@nextui-org/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import React from "react";
 
 const CardDetail = () => {
-  const { id } = useParams();
+  const { id }: { id: string } = useParams();
+  const page = 1;
+  const pageSize = 20;
+
+  const { data, loading } = useCards(id, page, pageSize);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Card Detail</h1>
-      <p>Card ID: {id}</p>
-      {/* Render more details about the card here */}
+    <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {data!.cards.map((card) => (
+        <div key={card.id}>
+          <Link href={`/cards/${card.id}`}>
+            <Image
+              isZoomed
+              width={300}
+              alt={`${card.name}'s image`}
+              src={`data:image/png;base64,${card.smallImage}`}
+            />
+          </Link>
+        </div>
+      ))}
     </div>
   );
 };

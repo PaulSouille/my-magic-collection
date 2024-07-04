@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { Extensions } from "@prisma/client";
+import { useEffect, useState } from "react";
 
 const useExtensions = () => {
   const [extensions, setExtensions] = useState<Extensions[]>([]);
@@ -17,12 +17,12 @@ const useExtensions = () => {
         setLoading(false);
         const repeatedArray = Array.from(
           { length: 10 },
-          () => extensionsWithBase64[0]
+          () => extensionsWithBase64[0],
         );
         setExtensions(repeatedArray);
       })
       .catch((error) => {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching extensions:", error);
         setLoading(false);
       });
   }, []);
