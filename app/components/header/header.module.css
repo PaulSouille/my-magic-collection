@@ -1,5 +1,4 @@
-.title {
-    color: var(--nextui-secondary-default);
-    font-weight:600;
-  }
-  
+.borderTest{
+  border-bottom: solid 1px;
+  border-color: hsl(var(--nextui-divider) / var(--nextui-divider-opacity, var(--tw-border-opacity)));
+}
