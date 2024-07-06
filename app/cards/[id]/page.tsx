@@ -11,11 +11,18 @@ import styles from "./page.module.css";
 const CardDetail = () => {
   const { id }: { id: string } = useParams();
   const initialPage = 1;
-  const pageSize = 20;
+  const initialPageSize = 20;
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(initialPage);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
   const [cards, setCards] = useState<Cards[]>([]);
-  const { data, loading } = useCards(id, page, pageSize);
+  const { data, loading } = useCards(id, page, initialPageSize, query);
+
+  const resetPagination = () => {
+    setPage(initialPage);
+    setCards([]);
+  };
 
   useEffect(() => {
     if (data && data.cards) {
@@ -25,6 +32,13 @@ const CardDetail = () => {
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    if (search.length > 3 || search.length === 0) {
+      resetPagination();
+      setQuery(search);
+    }
+  }, [search]);
 
   const loadMoreCards = () => {
     setLoadingMore(true);
@@ -36,10 +50,10 @@ const CardDetail = () => {
   }
   return (
     <div>
-      <SearchBar />
+      <SearchBar setSearch={setSearch} />
       <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {cards.map((card) => (
-          <div key={card.id}>
+        {cards.map((card, index) => (
+          <div key={index}>
             <Image
               className={card.stock > 0 ? "" : styles.notInStock}
               isZoomed
@@ -52,15 +66,17 @@ const CardDetail = () => {
       </div>
       <div className="flex content-center	justify-center	mb-5 mt-5">
         <div className="flex-grow"></div>
-        <div>
-          <Button
-            onPress={loadMoreCards}
-            isLoading={loadingMore}
-            disabled={loading}
-          >
-            {loadingMore ? "Loading..." : "Load more"}
-          </Button>
-        </div>
+        {data?.cards.length === initialPageSize && (
+          <div>
+            <Button
+              onPress={loadMoreCards}
+              isLoading={loadingMore}
+              disabled={loading}
+            >
+              {loadingMore ? "Loading..." : "Load more"}
+            </Button>
+          </div>
+        )}
         <div className="flex-grow"></div>
         <div className="flex justify-center content-center flex-wrap font-semibold">
           {cards.length} / {data?.totalCards}

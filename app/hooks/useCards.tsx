@@ -19,16 +19,19 @@ const useCards = (
   extensionId: string,
   page: number,
   pageSize: number,
+  query: string,
 ): IApiResponse<ICardsResponse> => {
   const [data, setData] = useState<ICardsResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
+  console.log(page);
+  console.log(query);
   useEffect(() => {
     axios
       .get(`/api/extensions/${extensionId}/cards`, {
         params: {
           page,
           pageSize,
+          query,
         },
       })
       .then((response) => response.data)
@@ -45,7 +48,7 @@ const useCards = (
         console.error("Error fetching cards:", error);
         setLoading(false);
       });
-  }, [extensionId, page, pageSize]);
+  }, [extensionId, page, pageSize, query]);
 
   return { data, loading };
 };
