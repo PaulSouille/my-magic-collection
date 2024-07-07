@@ -1,30 +1,38 @@
-import { PrismaClient } from '@prisma/client';
+import { rarityValues } from '@/app/components/rarityFilter/rarityFilter';
+import { PrismaClient, Rarity } from '@prisma/client';
 import { randomInt } from 'crypto';
 import { NextApiRequest } from 'next';
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient()
  
 
-export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLSearchParams}},  {params}:{params:{id:string}} ,) {
-    console.log(`Fetching cards for id ${params.id}`)
-    const id = params.id;
+export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLSearchParams}},  {params}:{params:{extensionCode:string}} ,) {
+    console.log(`Fetching cards for extension code ${params.extensionCode}`)
+    const extensionCode = params.extensionCode;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const query = request.nextUrl.searchParams.get('query') || '';
-  
-    if (!id) {
-      return NextResponse.json({ error: 'ExtensionId is required' }, { status: 400 });
+    const rarityFilterParam = request.nextUrl.searchParams.get('rarityFilter');
+    const rarityFilter: Rarity[] = rarityFilterParam ? JSON.parse(rarityFilterParam) : rarityValues;
+    console.log(rarityFilter)
+    if (!extensionCode) {
+      return NextResponse.json({ error: 'extensionCode is required' }, { status: 400 });
     }
   
     try {
       const skip = (page - 1) * pageSize;
       let cards = await prisma.cards.findMany({
         where: {
-          extensionId: parseInt(id),
+          extension: { 
+            code: extensionCode
+          },       
           printedName: {
             contains: query,  
             mode: 'insensitive' 
           },
+          rarity: {
+            in: rarityFilter // Filter cards where the type (rarity) is in the rarityFilter array
+          }
         },
         skip: skip,
         take: pageSize,
@@ -32,15 +40,17 @@ export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLS
           printedName: 'asc'
         },
         
-      });
+      }); 
   
       const totalCards = await prisma.cards.count({
         where: {
-            extensionId: parseInt(id)
+          extension: { 
+            code: extensionCode
+          },
         }
       });
       cards = cards.map((card)=>{
-        card.stock = randomInt(3);
+        card.stock = randomInt(3); 
         return card
       })
       return NextResponse.json({

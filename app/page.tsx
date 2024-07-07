@@ -13,7 +13,7 @@ export default function Home() {
     <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {extensions.map((extension) => (
         <div key={extension.id}>
-          <Link href={`/cards/${extension.id}`}>
+          <Link href={`/extensions/${extension.code}/cards`}>
             <Image
               isZoomed
               width={300}

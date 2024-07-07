@@ -1,0 +1,16 @@
+.activeFilter{
+    opacity: 1;
+}
+
+.notActiveFilter{
+    opacity: 0.5;
+}
+
+.rarityFilter{
+    font-size:50px !important;
+    cursor:pointer;
+}
+
+.rarityFilter:hover {
+    border-bottom: solid 1px
+}

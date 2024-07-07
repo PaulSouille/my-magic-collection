@@ -41,7 +41,7 @@ model Cards {
   content      String?
   cardMarketId Int?
   typeLine     String
-  type         Rarity
+  rarity       Rarity
   borderColor  BorderColor
   stock        Int
   isFoil       Boolean
@@ -49,9 +49,8 @@ model Cards {
   smallImage   Bytes?
   price        String?
 
-  extensionId  Int
-  Extensions   Extensions? @relation(fields: [extensionsId], references: [id])
-  extensionsId Int?
+  extensionId Int
+  extension   Extensions @relation(fields: [extensionId], references: [id])
 
   @@index([extensionId], name: "extensionId")
 }
