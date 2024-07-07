@@ -61,7 +61,6 @@ const CardDetail = () => {
 
   const fetchAndAppendCards = async () => {
     try {
-      //todo: why page is not the same as setPage did
       console.log(page);
       fetchCards(
         extensionCode,
@@ -72,8 +71,6 @@ const CardDetail = () => {
       ).then((response) => {
         const newCards = response!.cards;
         setCards((prevCards) => {
-          console.log(newCards[0].printedName);
-          console.log(prevCards[0].printedName);
           return [...prevCards, ...newCards];
         });
         setLoadingMore(false);

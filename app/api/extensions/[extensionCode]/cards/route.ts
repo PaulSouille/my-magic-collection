@@ -31,7 +31,7 @@ export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLS
             mode: 'insensitive' 
           },
           rarity: {
-            in: rarityFilter // Filter cards where the type (rarity) is in the rarityFilter array
+            in: rarityFilter 
           }
         },
         skip: skip,
