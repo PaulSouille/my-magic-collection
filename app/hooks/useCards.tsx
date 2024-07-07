@@ -13,17 +13,18 @@ const useCards = (
   pageSize: number,
   query: string,
   rarityFilter: Rarity[],
+  inStock: boolean | null,
 ): IApiResponse<ICardsResponse> => {
   const [data, setData] = useState<ICardsResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
-    fetchCards(extensionId, page, pageSize, query, rarityFilter).then(
+    fetchCards(extensionId, page, pageSize, query, rarityFilter, inStock).then(
       (data) => {
         setLoading(false);
         setData(data);
       },
     );
-  }, [extensionId, query, rarityFilter]);
+  }, [extensionId, query, rarityFilter, inStock]);
 
   return { data, loading };
 };

@@ -12,7 +12,8 @@ export function fetchCards( extensionId: string,
     page: number,
     pageSize: number,
     query: string,
-    rarityFilter: Rarity[]) {
+    rarityFilter: Rarity[],
+    inStock: boolean | null) {
     return axios
     .get(`/api/extensions/${extensionId}/cards`, {
       params: {
@@ -20,6 +21,7 @@ export function fetchCards( extensionId: string,
         pageSize,
         query,
         rarityFilter: JSON.stringify(rarityFilter),
+        inStock
       },
     }) .then((response) => response.data)
     .then((data) => {

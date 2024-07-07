@@ -14,7 +14,8 @@ export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLS
     const query = request.nextUrl.searchParams.get('query') || '';
     const rarityFilterParam = request.nextUrl.searchParams.get('rarityFilter');
     const rarityFilter: Rarity[] = rarityFilterParam ? JSON.parse(rarityFilterParam) : rarityValues;
-    console.log(rarityFilter)
+    const inStockParam = request.nextUrl.searchParams.get('inStock');
+    const inStock = inStockParam === 'true' ? true : (inStockParam === 'false' ? false : null);
     if (!extensionCode) {
       return NextResponse.json({ error: 'extensionCode is required' }, { status: 400 });
     }
@@ -32,8 +33,14 @@ export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLS
           },
           rarity: {
             in: rarityFilter 
-          }
+          },
+          ...(inStock !== null && {
+            stock: inStock ? {
+              gte: 1
+            } : 0
+          })
         },
+        
         skip: skip,
         take: pageSize,
         orderBy: {

@@ -1,4 +1,5 @@
 "use client";
+import InStockFilter from "@/app/components/inStockFilter";
 import RarityFilter, {
   rarityValues,
 } from "@/app/components/rarityFilter/rarityFilter";
@@ -21,6 +22,7 @@ const CardDetail = () => {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [cards, setCards] = useState<Cards[]>([]);
+  const [inStockFilter, setInStockFilter] = useState<boolean | null>(null);
   const [rarityFilter, setRarityFilter] = useState(rarityValues);
   const { data, loading } = useCards(
     extensionCode,
@@ -28,6 +30,7 @@ const CardDetail = () => {
     initialPageSize,
     query,
     rarityFilter,
+    inStockFilter,
   );
 
   const resetPagination = () => {
@@ -68,6 +71,7 @@ const CardDetail = () => {
         initialPageSize,
         query,
         rarityFilter,
+        inStockFilter,
       ).then((response) => {
         const newCards = response!.cards;
         setCards((prevCards) => {
@@ -86,10 +90,14 @@ const CardDetail = () => {
   return (
     <div>
       <RarityFilter
-        setRarityFilter={setRarityFilter}
         extensionCode={extensionCode}
+        setRarityFilter={setRarityFilter}
         rarityFilter={rarityFilter}
       />
+      <InStockFilter
+        setInStockFilter={setInStockFilter}
+        inStockFilter={inStockFilter}
+      ></InStockFilter>
       <SearchBar setSearch={setSearch} />
       <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {cards.map((card, index) => (
