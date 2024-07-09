@@ -16,9 +16,15 @@ export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLS
     const rarityFilter: Rarity[] = rarityFilterParam ? JSON.parse(rarityFilterParam) : rarityValues;
     const inStockParam = request.nextUrl.searchParams.get('inStock');
     const inStock = inStockParam === 'true' ? true : (inStockParam === 'false' ? false : null);
-    if (!extensionCode) {
-      return NextResponse.json({ error: 'extensionCode is required' }, { status: 400 });
-    }
+    const notInStockParam = request.nextUrl.searchParams.get('notInStock');
+    const notInStock = notInStockParam === 'true' ? true : (notInStockParam === 'false' ? false : null);
+    let stockConditions = [];
+
+    if (inStock && !notInStock) {
+      stockConditions.push({ stock: { gt: 0 } });
+    } else if (notInStock && !inStock) {
+      stockConditions.push({ stock: { equals: 0 } });
+    } 
   
     try {
       const skip = (page - 1) * pageSize;
@@ -34,11 +40,8 @@ export async function GET(request: NextApiRequest & {nextUrl: {searchParams:URLS
           rarity: {
             in: rarityFilter 
           },
-          ...(inStock !== null && {
-            stock: inStock ? {
-              gte: 1
-            } : 0
-          })
+          ...(stockConditions.length > 0 && { AND: stockConditions })
+
         },
         
         skip: skip,

@@ -9,10 +9,12 @@ export default function Header() {
         className={`${styles.borderTest} flex justify-between h-16 content-center flex-wrap`}
       >
         <div className="grow basis-0 flex justify-center	flex-wrap content-center h-full	">
-          <div>Logo</div>
+          <Link isBlock className=" font-semibold" href="/">
+            <div className="text-2xl		">🌹</div>
+          </Link>
         </div>
         <div className="h-full  flex-wrap content-center	">
-          <Link className="text-secondary-500 font-semibold" href="/">
+          <Link isBlock className=" font-semibold" href="/">
             My magic collection
           </Link>
         </div>

@@ -4,6 +4,7 @@ import RarityFilter, {
   rarityValues,
 } from "@/app/components/rarityFilter/rarityFilter";
 import SearchBar from "@/app/components/searchbar";
+import CardsSkeleton from "@/app/components/skeleton/cards";
 import useCards from "@/app/hooks/useCards";
 import { fetchCards } from "@/app/service/cardsService";
 import { Image } from "@nextui-org/image";
@@ -18,22 +19,31 @@ const CardDetail = () => {
   const initialPage = 1;
   const initialPageSize = 20;
   const [loadingMore, setLoadingMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(initialPage);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [cards, setCards] = useState<Cards[]>([]);
-  const [inStockFilter, setInStockFilter] = useState<boolean | null>(null);
+  const [inStock, setInStock] = useState(true);
+  const [notInStock, setNotInStock] = useState(true);
   const [rarityFilter, setRarityFilter] = useState(rarityValues);
-  const { data, loading } = useCards(
+  const { data } = useCards(
+    setLoading,
     extensionCode,
     page,
     initialPageSize,
     query,
     rarityFilter,
-    inStockFilter,
+    inStock,
+    notInStock,
   );
 
+  const addCardInStock = (cardId: number) => {
+    console.log(`adding card ${cardId} in stock`);
+  };
+
   const resetPagination = () => {
+    setLoading(true);
     setPage(initialPage);
     setCards([]);
   };
@@ -41,16 +51,18 @@ const CardDetail = () => {
   useEffect(() => {
     if (data && data.cards) {
       setCards(data.cards);
-      setLoadingMore(false);
+      setLoading(false);
     }
   }, [data]);
 
   useEffect(() => {
+    setLoading(true);
     resetPagination();
   }, [rarityFilter]);
 
   useEffect(() => {
     if (search.length > 3 || search.length === 0) {
+      setLoading(true);
       resetPagination();
       setQuery(search);
     }
@@ -64,14 +76,14 @@ const CardDetail = () => {
 
   const fetchAndAppendCards = async () => {
     try {
-      console.log(page);
       fetchCards(
         extensionCode,
         page + 1,
         initialPageSize,
         query,
         rarityFilter,
-        inStockFilter,
+        inStock,
+        notInStock,
       ).then((response) => {
         const newCards = response!.cards;
         setCards((prevCards) => {
@@ -84,52 +96,82 @@ const CardDetail = () => {
     }
   };
 
-  if (loading && page === initialPage) {
-    return <p>Loading...</p>;
-  }
   return (
     <div>
-      <RarityFilter
-        extensionCode={extensionCode}
-        setRarityFilter={setRarityFilter}
-        rarityFilter={rarityFilter}
-      />
-      <InStockFilter
-        setInStockFilter={setInStockFilter}
-        inStockFilter={inStockFilter}
-      ></InStockFilter>
-      <SearchBar setSearch={setSearch} />
-      <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {cards.map((card, index) => (
-          <div key={index}>
-            <Image
-              className={card.stock > 0 ? "" : styles.notInStock}
-              isZoomed
-              width={300}
-              alt={`${card.name}'s image`}
-              src={`data:image/png;base64,${card.smallImage}`}
+      <div className="flex flex-col items-center">
+        <div className="grid grid-cols-3 w-full max-w-xl items-center">
+          <div></div> {/* Empty div for left spacer */}
+          <div className="flex justify-center">
+            <RarityFilter
+              extensionCode={extensionCode}
+              setRarityFilter={setRarityFilter}
+              rarityFilter={rarityFilter}
             />
           </div>
-        ))}
-      </div>
-      <div className="flex content-center	justify-center	mb-5 mt-5">
-        <div className="flex-grow"></div>
-        {data?.cards.length === initialPageSize && (
-          <div>
-            <Button
-              onPress={loadMoreCards}
-              isLoading={loadingMore}
-              disabled={loading}
-            >
-              {loadingMore ? "Loading..." : "Load more"}
-            </Button>
+          <div className="flex justify-end">
+            <InStockFilter
+              setInStock={setInStock}
+              inStock={inStock}
+              setNotInStock={setNotInStock}
+              notInStock={notInStock}
+            />
           </div>
-        )}
-        <div className="flex-grow"></div>
-        <div className="flex justify-center content-center flex-wrap font-semibold">
-          {cards.length} / {data?.totalCards}
         </div>
       </div>
+      <SearchBar setSearch={setSearch} />
+      {loading && <CardsSkeleton />}
+
+      {!loading && (
+        <div>
+          <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {cards.map((card, index) => (
+              <div key={index}>
+                <Image
+                  className={card.stock > 0 ? "" : styles.notInStock}
+                  isZoomed
+                  width={300}
+                  alt={`${card.name}'s image`}
+                  src={`data:image/png;base64,${card.smallImage}`}
+                />
+                <div className="flex mt-2 flex-col	 justify-center">
+                  <div className=" flex font-bold justify-center	">
+                    {card.stock}
+                  </div>
+                  <Button
+                    onPress={() => {
+                      addCardInStock(card.id);
+                    }}
+                  >
+                    Ajouter au stock
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col items-center mt-5">
+            <div className="grid grid-cols-3 w-full  items-center">
+              <div></div> {/* Empty div for left spacer */}
+              <div className="flex justify-center">
+                {data?.cards.length === initialPageSize && (
+                  <div>
+                    <Button
+                      onPress={loadMoreCards}
+                      isLoading={loadingMore}
+                      disabled={loading}
+                    >
+                      {loadingMore ? "Loading..." : "Load more"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-end">
+                {cards.length} / {data?.totalCards}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

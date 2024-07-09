@@ -1,47 +1,39 @@
-import { Button } from "@nextui-org/react";
-interface InStockFilterProp {
-  inStockFilter: boolean | null;
-  setInStockFilter: React.Dispatch<React.SetStateAction<boolean | null>>;
+import { Checkbox } from "@nextui-org/react";
+
+interface InStockProp {
+  inStock: boolean;
+  setInStock: React.Dispatch<React.SetStateAction<boolean>>;
+  notInStock: boolean;
+  setNotInStock: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export default function InStockFilter({
-  inStockFilter,
-  setInStockFilter,
-}: InStockFilterProp) {
-  const toggleStock = () => {
-    if (inStockFilter === null) {
-      setInStockFilter(true);
-      return;
-    }
-    if (inStockFilter === true) {
-      setInStockFilter(false);
-      return;
-    }
-    if (inStockFilter === false) {
-      setInStockFilter(null);
-      return;
-    }
+  inStock,
+  setInStock,
+  notInStock,
+  setNotInStock,
+}: InStockProp) {
+  const toggleInStock = (state: boolean) => {
+    setInStock(state);
   };
-  const getInStockLabel = () => {
-    if (inStockFilter === null) {
-      return "Both";
-    }
-    if (inStockFilter === true) {
-      return "In stock";
-    }
-    if (inStockFilter === false) {
-      return "Not in stock";
-    }
+
+  const toggleNotInStock = (state: boolean) => {
+    setNotInStock(state);
   };
 
   return (
-    <div>
-      <Button
-        onClick={() => {
-          toggleStock();
-        }}
+    <div className="flex flex-col	">
+      <Checkbox
+        isSelected={inStock}
+        onChange={(e) => toggleInStock(e.target.checked)}
       >
-        {getInStockLabel()}
-      </Button>
+        In stock
+      </Checkbox>
+      <Checkbox
+        isSelected={notInStock}
+        onChange={(e) => toggleNotInStock(e.target.checked)}
+      >
+        Not in stock
+      </Checkbox>
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+/* eslint-disable @next/next/no-css-tags */
 import { NextUIProvider } from "@nextui-org/react";
+import type { Metadata } from "next";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { Inter } from "next/font/google";
-import "./globals.css";
 import Header from "./components/header/header";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

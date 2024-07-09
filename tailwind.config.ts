@@ -20,9 +20,9 @@ const config: Config = {
       },
       colors: {
         white: "#FFFFFF",
-        black: "#000000",
+        black: "#2e2e2e",
 
-        primary: "#481878",
+        primary: "#f03a17",
       },
     },
   },

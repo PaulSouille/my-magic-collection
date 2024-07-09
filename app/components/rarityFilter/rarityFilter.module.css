@@ -9,6 +9,7 @@
 .rarityFilter{
     font-size:50px !important;
     cursor:pointer;
+    border: 1px solid transparent;
 }
 
 .rarityFilter:hover {
