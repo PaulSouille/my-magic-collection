@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { Inter } from "next/font/google";
+import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
 import "./globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
             <main className="flex min-h-screen flex-col items-center pt-24">
               {children}
             </main>
+            <Footer></Footer>
           </NextThemesProvider>
         </NextUIProvider>
       </body>

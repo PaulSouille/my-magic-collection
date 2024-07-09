@@ -149,7 +149,7 @@ const CardDetail = () => {
             ))}
           </div>
 
-          <div className="flex flex-col items-center mt-5">
+          <div className="flex flex-col items-center mt-5 mb-5">
             <div className="grid grid-cols-3 w-full  items-center">
               <div></div> {/* Empty div for left spacer */}
               <div className="flex justify-center">
