@@ -6,7 +6,7 @@ import RarityFilter, {
 import SearchBar from "@/app/components/searchbar";
 import CardsSkeleton from "@/app/components/skeleton/cards";
 import useCards from "@/app/hooks/useCards";
-import { fetchCards } from "@/app/service/cardsService";
+import { addStock, fetchCards } from "@/app/service/cardsService";
 import { Image } from "@nextui-org/image";
 import { Button } from "@nextui-org/react";
 import { Cards } from "@prisma/client";
@@ -38,8 +38,17 @@ const CardDetail = () => {
     notInStock,
   );
 
-  const addCardInStock = (cardId: number) => {
-    console.log(`adding card ${cardId} in stock`);
+  const addCardInStock = async (cardId: number) => {
+    try {
+      const updatedCard = await addStock(cardId);
+      setCards((prevCards) =>
+        prevCards.map((card) =>
+          card.id === cardId ? { ...card, stock: updatedCard.stock } : card,
+        ),
+      );
+    } catch (error) {
+      console.error("Error adding card to stock:", error);
+    }
   };
 
   const resetPagination = () => {
@@ -114,6 +123,7 @@ const CardDetail = () => {
               inStock={inStock}
               setNotInStock={setNotInStock}
               notInStock={notInStock}
+              resetPagination={resetPagination}
             />
           </div>
         </div>
@@ -126,7 +136,7 @@ const CardDetail = () => {
           <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {cards.map((card, index) => (
               <div
-                className="relative flex justify-center items-center  group"
+                className="relative flex justify-center items-center group"
                 key={index}
               >
                 <Image
@@ -154,7 +164,7 @@ const CardDetail = () => {
           </div>
 
           <div className="flex flex-col items-center mt-5 mb-5">
-            <div className="grid grid-cols-3 w-full  items-center">
+            <div className="grid grid-cols-3 w-full items-center">
               <div></div>
               <div className="flex justify-center">
                 {cards.length !== data?.totalCards && (

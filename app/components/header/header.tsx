@@ -10,7 +10,7 @@ export default function Header() {
       >
         <div className="grow basis-0 flex justify-center	flex-wrap content-center h-full	">
           <Link isBlock className=" font-semibold" href="/">
-            <div className="text-2xl		">🌹</div>
+            <div className="text-2xl">🌹</div>
           </Link>
         </div>
         <div className="h-full  flex-wrap content-center	">

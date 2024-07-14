@@ -5,18 +5,22 @@ interface InStockProp {
   setInStock: React.Dispatch<React.SetStateAction<boolean>>;
   notInStock: boolean;
   setNotInStock: React.Dispatch<React.SetStateAction<boolean>>;
+  resetPagination: () => void;
 }
 export default function InStockFilter({
   inStock,
   setInStock,
   notInStock,
   setNotInStock,
+  resetPagination,
 }: InStockProp) {
   const toggleInStock = (state: boolean) => {
+    resetPagination();
     setInStock(state);
   };
 
   const toggleNotInStock = (state: boolean) => {
+    resetPagination();
     setNotInStock(state);
   };
 
