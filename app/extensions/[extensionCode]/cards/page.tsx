@@ -125,22 +125,26 @@ const CardDetail = () => {
         <div>
           <div className=" grid gap-16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {cards.map((card, index) => (
-              <div key={index}>
+              <div
+                className="relative flex justify-center items-center  group"
+                key={index}
+              >
                 <Image
-                  className={card.stock > 0 ? "" : styles.notInStock}
+                  className={`${card.stock > 0 ? "" : styles.notInStock}`}
                   isZoomed
                   width={300}
                   alt={`${card.name}'s image`}
                   src={`data:image/png;base64,${card.smallImage}`}
                 />
-                <div className="flex mt-2 flex-col	 justify-center">
-                  <div className=" flex font-bold justify-center	">
+                <div className="absolute inset-0 flex flex-col justify-center rounded-lg items-center bg-gray-900 bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <div className="flex font-bold justify-center text-white">
                     {card.stock}
                   </div>
                   <Button
                     onPress={() => {
                       addCardInStock(card.id);
                     }}
+                    className="mt-2"
                   >
                     Ajouter au stock
                   </Button>
@@ -151,9 +155,9 @@ const CardDetail = () => {
 
           <div className="flex flex-col items-center mt-5 mb-5">
             <div className="grid grid-cols-3 w-full  items-center">
-              <div></div> {/* Empty div for left spacer */}
+              <div></div>
               <div className="flex justify-center">
-                {data?.cards.length === initialPageSize && (
+                {cards.length !== data?.totalCards && (
                   <div>
                     <Button
                       onPress={loadMoreCards}

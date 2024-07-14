@@ -4,13 +4,14 @@ const path = require('path');
 const axios = require('axios');
 const prisma = new PrismaClient();
 
-const IMAGE_URL="";
-const EXTENSION_ID = 1;
+let EXTENSION_ID = process.argv[2];
+let IMAGE_URL=process.argv[3]
+
 
 async function main() {
 
       const createdCard = await prisma.extensions.update({
-        where: {id:EXTENSION_ID},
+        where: {id:Number(EXTENSION_ID)},
       data: {
         image: await fetchImageWithDelay( IMAGE_URL),
       }

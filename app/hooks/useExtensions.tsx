@@ -19,7 +19,7 @@ const useExtensions = () => {
           { length: 10 },
           () => extensionsWithBase64[0],
         );
-        setExtensions(repeatedArray);
+        setExtensions(extensionsWithBase64);
       })
       .catch((error) => {
         console.error("Error fetching extensions:", error);

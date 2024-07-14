@@ -56,3 +56,15 @@ export function countExtensionStock(extensionId: string) {
       console.error("Error fetching cards:", error);
     });
 }
+
+export const addStock = async (cardId: number) => {
+  const response = await fetch(`/api/cards/${cardId}/stock/add`, {
+    method: 'PUT',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to add stock');
+  }
+
+  return response.json();
+};

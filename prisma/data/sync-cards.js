@@ -6,7 +6,7 @@ const axios = require('axios');
 const prisma = new PrismaClient();
 
 async function main() {
-  const filePath = path.join(__dirname, 'LTR-.json');
+  const filePath = path.join(__dirname, 'ACR.json');
   const cardsData = JSON.parse(fs.readFileSync(filePath, 'utf-8'))['data'];
 
   for (const card of cardsData) {
@@ -22,7 +22,7 @@ async function main() {
         extensionId: 1,
         cardMarketId: card.cardmarket_id ?? null,
         typeLine: card.type_line,
-        type: card.rarity.toUpperCase(), // Type
+        rarity: card.rarity.toUpperCase(), // Type
         borderColor: card.border_color.toUpperCase(),
         stock:0,
         isFoil: false,
