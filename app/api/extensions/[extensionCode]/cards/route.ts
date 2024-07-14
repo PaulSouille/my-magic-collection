@@ -1,11 +1,10 @@
 import { rarityValues } from '@/app/components/rarityFilter/rarityFilter';
 import { PrismaClient } from '@prisma/client';
-import { NextApiRequest } from 'next';
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getCards } from '../../services/card.service';
 const prisma = new PrismaClient()
 
-export async function GET(request: NextApiRequest & { nextUrl: { searchParams: URLSearchParams } }, { params }: { params: { extensionCode: string } }) {
+export async function GET(request: NextRequest & { nextUrl: { searchParams: URLSearchParams } }, { params }: { params: { extensionCode: string } }) {
   console.log(`Fetching cards for extension code ${params.extensionCode}`);
   const extensionCode = params.extensionCode;
   const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
