@@ -54,12 +54,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Read Docker Image Identifiers
+        run: echo ::set-env name=IMAGE_REPOSITORY::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/next-app:latest
+          tags: ghcr.io/${{  env.IMAGE_REPOSITORY }}/mmc-app:latest
 
       - name: Log out from GitHub Container Registry
         run: docker logout ghcr.io
