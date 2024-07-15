@@ -1,29 +1,25 @@
-FROM node:lts-buster-slim AS base
+# Use the official Node.js image as the base image
+FROM node:18-alpine
+
+# Set the working directory
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-FROM base as build
-RUN export NODE_ENV=production
-RUN npm ci
+# Install dependencies
+RUN npm install
 
+# Copy the rest of the application code
 COPY . .
+
 RUN npx prisma generate
+# Build the application
 RUN npm run build
 
-FROM base as prod-build
-
-RUN npm install --production
-COPY prisma prisma
-RUN npx prisma generate
-RUN cp -R node_modules prod_node_modules
-
-FROM base as prod
-
-COPY --from=prod-build /app/prod_node_modules /app/node_modules
-COPY --from=build  /app/.next /app/.next
-COPY --from=build  /app/public /app/public
-COPY --from=build  /app/prisma /app/prisma
-
+# Expose the port on which the app runs
 EXPOSE 3000
-CMD ["npm","run", "start"]
+
+
+# Start the application
+CMD ["npm", "start"]
