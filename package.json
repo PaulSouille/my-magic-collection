@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run prisma:generate && next build",
+    "build": "next build",
     "start": "next start",
+    "start:migrate:prod": "node server.js",
     "lint": "next lint",
-    "prisma:generate": "npx prisma generate",
-    "prisma:push": "npx prisma db push",
-    "extension:addImage": "node prisma/data/set-extension-image.js"
+    "docker:dev": "npm run dev",
+    "docker:compose:dev": "docker-compose down && docker compose up -d --build",
+    "docker:compose:prod": "docker-compose down && docker compose -f docker-compose.prod.yml up -d --build"
   },
   "dependencies": {
     "@nextui-org/navbar": "^2.0.33",
