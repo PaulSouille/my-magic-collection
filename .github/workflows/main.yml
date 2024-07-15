@@ -41,6 +41,8 @@ jobs:
           branch: master
 
   build-docker-image:
+    environment: ci
+
     needs: increment-version
     runs-on: ubuntu-latest
     env:
