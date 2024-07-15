@@ -20,6 +20,7 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 # Generate Prisma client
+RUN npx prisma db push
 RUN npx prisma generate
 
 # Build the application
