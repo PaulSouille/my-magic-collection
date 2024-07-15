@@ -12,7 +12,7 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
-ENV DATABASE_URL="test"
+ENV DATABASE_URL="postgresql://test:test@0.0.0.0:5432/postgres"
 
 # Build the application
 RUN npm run build
