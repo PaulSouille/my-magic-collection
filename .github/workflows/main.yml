@@ -64,7 +64,7 @@ jobs:
       - name: "Build Inventory Image"
         run: |
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          docker build . --tag ghcr.io/${REPO_NAME}/mcc-app:latest
+          docker build --build-arg DATABASE_URL=$DATABASE_URL . --tag ghcr.io/${REPO_NAME}/mcc-app:latest
           docker push ghcr.io/${REPO_NAME}/mcc-app:latest
 
       - name: Log out from GitHub Container Registry
