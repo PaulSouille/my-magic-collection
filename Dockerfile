@@ -3,7 +3,6 @@
 
 
 FROM node:18-alpine AS base
-RUN apt-get update && apt-get install libssl-dev ca-certificates -y
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
