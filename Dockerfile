@@ -1,33 +1,52 @@
-
-
-
-
+# Use the official Node.js 18 image as the base image
 FROM node:18-alpine AS base
+
+# Set the working directory
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+# Copy package.json and package-lock.json
+COPY package.json ./
+COPY package-lock.json ./
 
-FROM base as build
-RUN export NODE_ENV=production
+# Install dependencies
+RUN npm install
 
+# Copy the rest of the application code
 COPY . .
-RUN npm run prisma:generate
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build the Next.js app
 RUN npm run build
 
-FROM base as prod-build
+# Use a lightweight web server to serve the app
+FROM node:18-alpine AS production
 
-RUN npm install --production
-COPY prisma prisma
-RUN npm run prisma:generate
-RUN cp -R node_modules prod_node_modules
+# Set environment variables
+ENV NODE_ENV=production
 
-FROM base as prod
+# Set the working directory
+WORKDIR /app
 
-COPY --from=prod-build /app/prod_node_modules /app/node_modules
-COPY --from=build  /app/.next /app/.next
-COPY --from=build  /app/public /app/public
-COPY --from=build  /app/prisma /app/prisma
+# Copy package.json and package-lock.json
+COPY package.json ./
+COPY package-lock.json ./
 
+# Install only production dependencies
+RUN npm install --only=production
+
+# Copy the build output and Prisma client from the previous stage
+COPY --from=base /app/.next ./.next
+COPY --from=base /app/public ./public
+COPY --from=base /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=base /app/prisma ./prisma
+
+# Copy environment variables file if you have one
+# COPY .env .env
+
+# Expose the port the app runs on
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+
+# Start the Next.js app
+CMD ["npm", "start"]
