@@ -1,5 +1,3 @@
-// src/api/services/cardService.ts
-
 import { PrismaClient, Rarity } from '@prisma/client';
 
 const prisma = new PrismaClient();

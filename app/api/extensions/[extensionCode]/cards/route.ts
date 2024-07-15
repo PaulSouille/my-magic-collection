@@ -1,7 +1,7 @@
 import { rarityValues } from '@/app/components/rarityFilter/rarityFilter';
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from "next/server";
-import { getCards } from '../../services/card.service';
+import { getCards } from '../../../services/card.service';
 const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest & { nextUrl: { searchParams: URLSearchParams } }, { params }: { params: { extensionCode: string } }) {

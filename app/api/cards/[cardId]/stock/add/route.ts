@@ -1,7 +1,7 @@
 
 
 
-import { incrementCardStock } from '@/app/api/extensions/services/card.service';
+import { incrementCardStock } from '@/app/api/services/card.service';
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 const prisma = new PrismaClient()
