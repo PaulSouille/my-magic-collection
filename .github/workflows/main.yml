@@ -43,8 +43,12 @@ jobs:
   build-docker-image:
     needs: increment-version
     runs-on: ubuntu-latest
-
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
+      - name: Log DATABASE_URL
+        run: echo "DATABASE_URL is $DATABASE_URL"
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -61,7 +65,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          docker buildx build --push --tag ghcr.io/${REPO_NAME}/mcc-app:latest .
+          docker buildx build --push --tag ghcr.io/${REPO_NAME}/mcc-app:latest --build-arg DATABASE_URL=$DATABASE_URL .
 
       - name: Log out from GitHub Container Registry
         run: docker logout ghcr.io
