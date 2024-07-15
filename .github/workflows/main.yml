@@ -42,7 +42,9 @@ jobs:
 
   build-docker-image:
     environment: ci
-
+    permissions:
+      contents: read
+      packages: write
     needs: increment-version
     runs-on: ubuntu-latest
     env:
