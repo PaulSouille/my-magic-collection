@@ -17,7 +17,7 @@ export default function Footer() {
           </Link>
         </div>
         <div className="grow basis-0	flex	justify-center flex-wrap content-center h-full">
-          <div>{process.env.NEXT_PUBLIC_VERSION}</div>
+          <div>v: {process.env.NEXT_PUBLIC_VERSION}</div>
         </div>
       </div>
     );
