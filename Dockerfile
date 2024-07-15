@@ -12,6 +12,7 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
+ENV DATABASE_URL="test"
 
 # Build the application
 RUN npm run build
@@ -19,7 +20,6 @@ RUN npm run build
 # Expose the port on which the app runs
 EXPOSE 3000
 
-ENV DATABASE_URL="test"
 
 # Start the application
 CMD ["npm", "start"]
